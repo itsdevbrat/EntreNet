@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setIsSmartLockEnabled(false)
+                    .setTheme(R.style.AppTheme)
                     .setAuthMethodPickerLayout(customLayout)
                     .setAvailableProviders(Arrays.asList(
                             new AuthUI.IdpConfig.GoogleBuilder().build(),

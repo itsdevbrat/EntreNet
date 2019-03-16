@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EntreNet</string>
+    <string name="facebook_application_id" translatable="false">842899939380970</string>
 </resources>

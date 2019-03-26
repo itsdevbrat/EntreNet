@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthMethodPickerLayout;
@@ -14,6 +16,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private DatabaseReference db;
     private EditText nameField,ageField;
+    private ImageView dp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         //Initializing UI Elements
         nameField = (EditText)findViewById(R.id.name);
         ageField = (EditText)findViewById(R.id.age);
+        dp = (ImageView) findViewById(R.id.dp);
+        Picasso.get().load(auth.getCurrentUser().getPhotoUrl().toString()).into(dp);
 
         //Setting Layout for sign in screen
         AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout

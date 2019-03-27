@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1005117738429",
+    "firebase_url": "https://entrenet-10777.firebaseio.com",
+    "project_id": "entrenet-10777",
+    "storage_bucket": "entrenet-10777.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005117738429:android:64442980e8e455d8",
+        "android_client_info": {
+          "package_name": "com.dev.entrenet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005117738429-vbiisrj2530gj2f0j1pat4ocuj5jo5ig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dev.entrenet",
+            "certificate_hash": "54e2acd69d5e7c6c5d70ceebc70a1412d3028727"
+          }
+        },
+        {
+          "client_id": "1005117738429-nugmu0ll8oka94cupn7527r7drdnnuab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsTZsLpZxRez88DLaEHM_o4XZ7-moYNQ4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005117738429-nugmu0ll8oka94cupn7527r7drdnnuab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

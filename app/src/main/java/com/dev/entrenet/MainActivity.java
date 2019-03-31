@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         nameField = (EditText)findViewById(R.id.name);
         ageField = (EditText)findViewById(R.id.age);
         dp = (ImageView) findViewById(R.id.dp);
-        Picasso.get().load(auth.getCurrentUser().getPhotoUrl().toString()).into(dp);
 
         //Setting Layout for sign in screen
         AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                             new AuthUI.IdpConfig.FacebookBuilder().build()))
                     .build(), RC_SIGN_IN);
         }
-
     }
 
     //Authentication Finished
@@ -73,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == RC_SIGN_IN){
             if(resultCode == RESULT_OK){
                 Toast.makeText(this, "sign In Suceess"+auth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
+                Picasso.get().load(auth.getCurrentUser().getPhotoUrl().toString()).into(dp);
             }else{
                 Toast.makeText(this, "Please Try Again", Toast.LENGTH_SHORT).show();
                 finish();

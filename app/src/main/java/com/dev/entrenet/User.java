@@ -1,7 +1,7 @@
 package com.dev.entrenet;
 
 public class User {
-    private String userId,username,age;
+    public String userId,username,age;
 
 
     public User() {

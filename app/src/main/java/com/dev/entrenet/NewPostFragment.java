@@ -21,35 +21,35 @@ import java.util.HashMap;
 
 public class NewPostFragment extends Fragment {
 
-    private EditText posttitle,postdesc;
-    private FirebaseAuth auth;
-    private DatabaseReference db;
-    private Button postbutton;
+  private EditText posttitle,postdesc;
+  private FirebaseAuth auth;
+  private DatabaseReference db;
+  private Button postbutton;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_new_post, null);
-    }
+  @Nullable
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_new_post, null);
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        db = FirebaseDatabase.getInstance().getReference();
-        auth = FirebaseAuth.getInstance();
-        posttitle = (EditText) getView().findViewById(R.id.posttitle);
-        postdesc = (EditText) getView().findViewById(R.id.postdesc);
-        postbutton = (Button) getView().findViewById(R.id.postbutton);
-        postbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HashMap<String,String> post = new HashMap<String, String>();
-                post.put("title",posttitle.getText().toString());
-                post.put("desc",postdesc.getText().toString());
-                db.child("Posts").push().setValue(post);
-                postbutton.setBackgroundColor(R.color.colorPrimary);
-                postbutton.setClickable(false);
-            }
-        });
-    }
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    db = FirebaseDatabase.getInstance().getReference();
+    auth = FirebaseAuth.getInstance();
+    posttitle = (EditText) getView().findViewById(R.id.posttitle);
+    postdesc = (EditText) getView().findViewById(R.id.postdesc);
+    postbutton = (Button) getView().findViewById(R.id.postbutton);
+
+    postbutton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Post post = new Post(auth.getCurrentUser().getDisplayName(),posttitle.getText().toString(),postdesc.getText().toString(),auth.getCurrentUser().getPhotoUrl().toString());
+        db.child("Posts").push().setValue(post);
+        postbutton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        postbutton.setClickable(false);
+      }
+    });
+  }
 }

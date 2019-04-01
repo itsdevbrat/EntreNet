@@ -5,15 +5,19 @@ public class Post {
     String title;
     String desc;
     String userdp;
+    double latitude;
+    double longitude;
 
     public Post() {
     }
 
-    public Post(String username, String title, String desc, String userdp) {
+    public Post(String username, String title, String desc, String userdp ,double latitude,double longitude) {
         this.username = username;
         this.title = title;
         this.desc = desc;
         this.userdp = userdp;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getUsername() {
@@ -32,5 +36,12 @@ public class Post {
         return userdp;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
 }
 

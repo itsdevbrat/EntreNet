@@ -1,7 +1,14 @@
 package com.dev.entrenet;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference db;
     private EditText nameField,ageField;
     private ImageView dp;
+    private String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+    private int allPermissionsCode = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         //Authentication Starts
         if (auth.getCurrentUser() != null) {
             Toast.makeText(getApplicationContext(), "Welcome User" + auth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
+            Picasso.get().load(auth.getCurrentUser().getPhotoUrl().toString()).into(dp);
         } else {
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
@@ -63,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
                             new AuthUI.IdpConfig.FacebookBuilder().build()))
                     .build(), RC_SIGN_IN);
         }
+
+        managePermissions(permissions);
     }
 
     //Authentication Finished
@@ -90,5 +102,35 @@ public class MainActivity extends AppCompatActivity {
         User user = new User(auth.getCurrentUser().getUid(),nameField.getText().toString(),ageField.getText().toString());
         db.child("Users").child(auth.getCurrentUser().getUid()).setValue(user);
         startActivity(new Intent(this,HomeActivity.class));
+    }
+
+    private void managePermissions(String[] permissions) {
+
+        ActivityCompat.requestPermissions(this,permissions,allPermissionsCode);
+
+        for (final String permission : permissions){
+            if(ContextCompat.checkSelfPermission(this,permission)!= PackageManager.PERMISSION_GRANTED){
+                if(ActivityCompat.shouldShowRequestPermissionRationale(this,permission)){
+                    new AlertDialog.Builder(this)
+                            .setTitle("Please we need the gps permissions to serve you the best content")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{permission},allPermissionsCode);
+                                }
+                            }).create().show();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == allPermissionsCode) {
+            if(grantResults.length<=0)
+                managePermissions(permissions);
+
+        }
     }
 }

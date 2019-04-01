@@ -4,83 +4,86 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <android.support.constraint.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".NewPostFragment">
+  <android.support.constraint.ConstraintLayout
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:context=".NewPostFragment">
 
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="84dp"
-            android:text="What Idea do you have?"
-            android:textColor="@color/colorAccent"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="84dp"
+        android:fontFamily="@font/raleway"
+        android:text="What Idea do you have?"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayout3"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:textColorHint="@color/colorAccent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:background="@drawable/border"
-            android:paddingTop="20dp">
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout3"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:textColorHint="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:background="@drawable/border"
+        android:paddingTop="20dp">
 
-            <EditText
-                android:id="@+id/posttitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Enter Title"
-                android:textColor="@color/colorAccent" />
+      <EditText
+          android:id="@+id/posttitle"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:fontFamily="@font/raleway"
+          android:hint="Enter Title"
+          android:textColor="@color/colorAccent" />
 
-        </android.support.design.widget.TextInputLayout>
+    </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayout4"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/border"
-            android:paddingTop="20dp"
-            android:textColorHint="@color/colorAccent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout4"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/border"
+        android:paddingTop="20dp"
+        android:textColorHint="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
-            <EditText
-                android:id="@+id/postdesc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Enter Desc"
-                android:inputType="textMultiLine"
-                android:singleLine="false"
-                android:textColor="@color/colorAccent" />
+      <EditText
+          android:id="@+id/postdesc"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:fontFamily="@font/raleway"
+          android:hint="Enter Desc"
+          android:inputType="textMultiLine"
+          android:singleLine="false"
+          android:textColor="@color/colorAccent" />
 
-        </android.support.design.widget.TextInputLayout>
+    </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/postbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Post It!"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
+    <Button
+        android:id="@+id/postbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Post It!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
 
 
-    </android.support.constraint.ConstraintLayout>
+  </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

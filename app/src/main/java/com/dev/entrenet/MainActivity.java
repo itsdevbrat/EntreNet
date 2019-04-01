@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void saveProfile(View view) {
         Log.d("name", "name is" +nameField.getText().toString()+ageField.getText().toString() );
-        signout.startAnimation(animation1);
+        save.startAnimation(animation1);
         User user = new User(auth.getCurrentUser().getUid(),nameField.getText().toString(),ageField.getText().toString());
         db.child("Users").child(auth.getCurrentUser().getUid()).setValue(user);
         startActivity(new Intent(this,HomeActivity.class));

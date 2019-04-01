@@ -49,7 +49,6 @@ public class FeedsFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         postsList.setLayoutManager(linearLayoutManager);
         postsList.setHasFixedSize(true);
-
         postsList.setAdapter(recyclerViewAdapter);
 
 

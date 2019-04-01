@@ -20,6 +20,7 @@
 
         <TextView
             android:id="@+id/profile"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
@@ -27,10 +28,11 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="PROFILE"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/feeds"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
@@ -38,10 +40,11 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="FEEDS"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/post"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
@@ -49,7 +52,7 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="POST"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 

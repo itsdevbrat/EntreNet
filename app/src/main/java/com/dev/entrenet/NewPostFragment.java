@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -30,8 +31,9 @@ public class NewPostFragment extends Fragment {
   private FusedLocationProviderClient fusedLocationClient;
   private double latitude;
   private double longitude;
+  private AlphaAnimation animation1;
 
-  @Nullable
+    @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_new_post, null);
@@ -46,8 +48,10 @@ public class NewPostFragment extends Fragment {
             .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
               @Override
               public void onSuccess(Location location) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
+                  if(location!= null){
+                      latitude = location.getLatitude();
+                      longitude = location.getLongitude();
+                  }
               }
             });
 
@@ -57,12 +61,19 @@ public class NewPostFragment extends Fragment {
     postdesc = (EditText) getView().findViewById(R.id.postdesc);
     postbutton = (Button) getView().findViewById(R.id.postbutton);
 
+      animation1 = new AlphaAnimation(0.2f, 1.0f);
+      animation1.setDuration(1000);
+      animation1.setStartOffset(5000);
+      animation1.setFillAfter(true);
+
     postbutton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+          postbutton.startAnimation(animation1);
         Post post = new Post(auth.getCurrentUser().getDisplayName(),posttitle.getText().toString(),postdesc.getText().toString(),auth.getCurrentUser().getPhotoUrl().toString(),latitude,longitude);
         db.child("Posts").push().setValue(post);
-        postbutton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        Fragment feedsFragment = new FeedsFragment();
+        getFragmentManager().beginTransaction().replace(R.id.feedsfragment,feedsFragment).commit();
         posttitle.setText("");
         postdesc.setText("");
       }

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class ViewHolderOfPost extends RecyclerView.ViewHolder {
 
-    public TextView username,title,desc;
+    public TextView username,title,desc,distance;
     public ImageView userdp;
     public CardView postCardView;
 
@@ -23,5 +23,6 @@ public class ViewHolderOfPost extends RecyclerView.ViewHolder {
         desc = (TextView)itemView.findViewById(R.id.desc);
         userdp = (ImageView) itemView.findViewById(R.id.userdp);
         postCardView = (CardView) itemView.findViewById(R.id.postcardview);
+        distance = (TextView)itemView.findViewById(R.id.distance);
     }
 }

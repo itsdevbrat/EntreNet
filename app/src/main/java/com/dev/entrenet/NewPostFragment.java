@@ -70,7 +70,7 @@ public class NewPostFragment extends Fragment {
       @Override
       public void onClick(View v) {
           postbutton.startAnimation(animation1);
-        Post post = new Post(auth.getCurrentUser().getDisplayName(),posttitle.getText().toString(),postdesc.getText().toString(),auth.getCurrentUser().getPhotoUrl().toString(),latitude,longitude);
+        Post post = new Post(auth.getCurrentUser().getDisplayName(),posttitle.getText().toString(),postdesc.getText().toString(),auth.getCurrentUser().getPhotoUrl().toString(),latitude,longitude,auth.getCurrentUser().getEmail(),auth.getCurrentUser().getUid());
         db.child("Posts").push().setValue(post);
         Fragment feedsFragment = new FeedsFragment();
         getFragmentManager().beginTransaction().replace(R.id.feedsfragment,feedsFragment).commit();

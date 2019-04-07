@@ -38,6 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolderOfPost> 
         viewHolderOfPost.title.setText(post.title);
         viewHolderOfPost.desc.setText(post.desc);
         Picasso.get().load(post.userdp).into(viewHolderOfPost.userdp);
+        viewHolderOfPost.distance.setText(String.format("%.3f",post.distance)+"KM");
         viewHolderOfPost.postCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

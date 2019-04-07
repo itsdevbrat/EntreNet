@@ -2,10 +2,12 @@ package com.dev.entrenet;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -34,8 +36,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
@@ -76,8 +81,18 @@ public class MainActivity extends AppCompatActivity {
 
         //Authentication Starts
         if (auth.getCurrentUser() != null) {
-            Toast.makeText(getApplicationContext(), "Welcome User" + auth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
-            Picasso.get().load(auth.getCurrentUser().getPhotoUrl().toString()).into(dp);
+            db.child("Users").child(auth.getCurrentUser().getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists())
+                        startActivity(new Intent(MainActivity.this,HomeActivity.class));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Picasso.get().load(auth.getCurrentUser().getPhotoUrl().toString()).into(dp);
+                }
+            });
         } else {
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
@@ -91,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         managePermissions(permissions);
-        turnGpsOn();
         buttonAnimation();
     }
 
@@ -161,53 +175,5 @@ public class MainActivity extends AppCompatActivity {
                 managePermissions(permissions);
 
         }
-    }
-
-    private void turnGpsOn() {
-
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-
-        Task<LocationSettingsResponse> result =
-                LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
-
-
-
-        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
-                try {
-                    LocationSettingsResponse response = task.getResult(ApiException.class);
-                    // All location settings are satisfied. The client can initialize location
-                    // requests here.
-                } catch (ApiException exception) {
-                    switch (exception.getStatusCode()) {
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            // Location settings are not satisfied. But could be fixed by showing the
-                            // user a dialog.
-                            try {
-                                // Cast to a resolvable exception.
-                                ResolvableApiException resolvable = (ResolvableApiException) exception;
-                                // Show the dialog by calling startResolutionForResult(),
-                                // and check the result in onActivityResult().
-                                resolvable.startResolutionForResult(
-                                        MainActivity.this,
-                                        LocationRequest.PRIORITY_HIGH_ACCURACY);
-                            } catch (IntentSender.SendIntentException e) {
-                                // Ignore the error.
-                            } catch (ClassCastException e) {
-                                // Ignore, should be an impossible error.
-                            }
-                            break;
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            // Location settings are not satisfied. However, we have no way to fix the
-                            // settings so we won't show the dialog.
-                            break;
-                    }
-                }
-            }
-        });
     }
 }

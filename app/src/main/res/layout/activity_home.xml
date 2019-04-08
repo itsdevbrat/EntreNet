@@ -28,7 +28,8 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="PROFILE"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/feeds"
@@ -40,7 +41,8 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="FEEDS"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/post"
@@ -52,7 +54,8 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="POST"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

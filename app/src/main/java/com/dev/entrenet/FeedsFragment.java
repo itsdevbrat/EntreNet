@@ -56,14 +56,33 @@ public class FeedsFragment extends Fragment {
     RecyclerViewAdapter recyclerViewAdapter;
     FirebaseAuth auth;
     FusedLocationProviderClient fusedLocationProviderClient;
+    LinearLayoutManager linearLayoutManager;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private double userLat, userLng;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+       return inflater.inflate(R.layout.fragment_feeds, null);
+    }
 
-        //Location
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //Firebase
+        auth = FirebaseAuth.getInstance();
+        postsRef = FirebaseDatabase.getInstance().getReference().child("Posts");
+        //RecyclerView Setup
+        posts = new ArrayList<Post>();
+        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), posts);
+        postsList = (RecyclerView) view.findViewById(R.id.postsList);
+        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        postsList.setLayoutManager(linearLayoutManager);
+        postsList.setHasFixedSize(true);
+        postsList.setAdapter(recyclerViewAdapter);
+
+        //Location setup --------------------------------------------------------------------------------------------------------------
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         //Set a location Request
@@ -77,73 +96,34 @@ public class FeedsFragment extends Fragment {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult != null) {
-                    Toast.makeText(getActivity(), "loc " + locationResult.getLastLocation().getLatitude(), Toast.LENGTH_SHORT).show();
-                    userLat = locationResult.getLastLocation().getLatitude();
-                    userLng = locationResult.getLastLocation().getLongitude();
-                    Log.d("devbrat", "userloc lat" + userLng +" lng "+ userLat);
+                    Log.d("devbrat","Got Location");
                 }
             }
         };
+        //Location setup finished -----------------------------------------------------------------------------------------------------
 
         LocationManager manager = (LocationManager) getActivity().getSystemService(HomeActivity.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(manager.GPS_PROVIDER)){
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             turnGpsOn();
-            Log.d("devbrat", "userloc lat" + userLng +" lng "+ userLat);
-        }
-
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
-
-        return inflater.inflate(R.layout.fragment_feeds, null);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        //Firebase
-        auth = FirebaseAuth.getInstance();
-        postsRef = FirebaseDatabase.getInstance().getReference().child("Posts");
-
-        //RecyclerView Setup
-        posts = new ArrayList<Post>();
-        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), posts);
-        postsList = (RecyclerView) view.findViewById(R.id.postsList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        postsList.setLayoutManager(linearLayoutManager);
-        postsList.setHasFixedSize(true);
-        postsList.setAdapter(recyclerViewAdapter);
-
-        //avoid posts repetition
-        final HashSet keys = new HashSet();
-
-        postsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    post = postSnapshot.getValue(Post.class);
-                    Log.d("devbrat", "post is " + keys);
-                    if (!keys.contains(postSnapshot.getKey()) && !post.userid.equals(auth.getCurrentUser().getUid())) {
-                        keys.add(postSnapshot.getKey());
-                        posts.add(post);
-                    }
+        }else{
+            Log.d("devbrat","GPS is on");
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    displayPosts(location);
                 }
-                calculateDistance(posts);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //Toast.makeText(getContext(),"Cant Load Posts",Toast.LENGTH_LONG).show();
-                Log.d("devbrat", databaseError.toString());
-            }
-        });
+            });
+        }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        //stop updates once activity goes to background
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    public void onResume() {
+        super.onResume();
+        LocationManager manager = (LocationManager) getActivity().getSystemService(HomeActivity.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            turnGpsOn();
+        }
     }
 
     private void turnGpsOn() {
@@ -172,31 +152,55 @@ public class FeedsFragment extends Fragment {
         });
     }
 
-    private void calculateDistance(final List<Post> posts) {
+    private void displayPosts(final Location userLocation) {
+        Log.d("devbrat","in display posts");
 
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location userLoc) {
-                    for (final Post post : posts) {
-                        Location postLoc = new Location("");
+        postsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                //avoid posts repetition
+                HashSet<String> keys = new HashSet();
+                Location postLoc;
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    post = postSnapshot.getValue(Post.class);
+                    Log.d("devbrat", "post is " + keys);
+                    if (!keys.contains(postSnapshot.getKey()) && !post.userid.equals(auth.getCurrentUser().getUid())) {
+                        keys.add(postSnapshot.getKey());
+                        postLoc = new Location("");
                         postLoc.setLatitude(post.latitude);
                         postLoc.setLongitude(post.longitude);
-                        post.distance = userLoc.distanceTo(postLoc) / 1000;
-                        Toast.makeText(getActivity(), "dis " + post.distance, Toast.LENGTH_SHORT).show();
-                        Log.d("devbrat", "userdistance is" + post.distance);
-                    }
-                    Collections.sort(posts, new Comparator<Post>() {
-                        @Override
-                        public int compare(Post o1, Post o2) {
-                            return Double.compare(o1.distance, o2.distance);
-                        }
-                    });
-                    recyclerViewAdapter.notifyDataSetChanged();
-                }
-            });
+                        post.distance = userLocation.distanceTo(postLoc) / 1000;
 
-//        Location userLoc = new Location("");
-//        userLoc.setLatitude(userLat);
-//        userLoc.setLongitude(userLng);
+                        posts.add(post);
+                        Log.d("devbrat", "Adding a post " + keys);
+                    }
+                }
+
+                Collections.sort(posts, new Comparator<Post>() {
+                    @Override
+                    public int compare(Post o1, Post o2) {
+                        return Double.compare(o1.distance, o2.distance);
+                    }
+                });
+
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //Toast.makeText(getContext(),"Cant Load Posts",Toast.LENGTH_LONG).show();
+                Log.d("devbrat", databaseError.toString());
+            }
+        });
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //stop updates once activity goes to background
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    }
+
 }

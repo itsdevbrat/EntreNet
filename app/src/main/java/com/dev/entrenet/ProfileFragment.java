@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
         ageField = (TextView)getView().findViewById(R.id.age);
         dp = (ImageView) getView().findViewById(R.id.dp);
 
-        Picasso.get().load(auth.getCurrentUser().getPhotoUrl().toString()).into(dp);
+        Picasso.get().load(auth.getCurrentUser().getPhotoUrl().toString().replace("s96-c/photo.jpg","s400-c/photo.jpg")).into(dp);
 
         db.child("Users").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
